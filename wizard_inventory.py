@@ -1,7 +1,9 @@
 import random
+from pathlib import Path
 
-ALL_ITEMS_FILENAME = "wizard_all_items.txt"
-INVENTORY_FILENAME = "wizard_inventory.txt"
+FOLDER = Path(__file__).resolve().parent
+ALL_ITEMS_FILENAME = FOLDER / "wizard_all_items.txt"
+INVENTORY_FILENAME = FOLDER / "wizard_inventory.txt"
 MAX_ITEMS = 4
 
 
@@ -32,6 +34,10 @@ def write_inventory(inventory):
 
 def walk(all_items, inventory):
     available_items = [item for item in all_items if item not in inventory]
+    if not available_items:
+        print("While walking down a path, you don't see anything.")
+        print()
+        return
     item = random.choice(available_items)
     print(f"While walking down a path, you see {item}.")
     choice = input("Do you want to grab it? (y/n): ").strip().lower()
@@ -75,14 +81,14 @@ def main():
     try:
         all_items = read_items(ALL_ITEMS_FILENAME)
     except FileNotFoundError:
-        print(f"Could not find {ALL_ITEMS_FILENAME} file.")
+        print(f"Could not find {ALL_ITEMS_FILENAME.name} file.")
         print("Exiting program. Bye!")
         return
 
     try:
         inventory = read_items(INVENTORY_FILENAME)
     except FileNotFoundError:
-        print(f"Could not find {INVENTORY_FILENAME} file.")
+        print(f"Could not find {INVENTORY_FILENAME.name} file.")
         print("Wizard is starting with no inventory.")
         print()
         inventory = []
