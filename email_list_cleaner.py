@@ -19,7 +19,7 @@ def read_prospects(filename):
 
 def clean_prospect(row):
     first_name, last_name, email = [value.strip() for value in row[:3]]
-    return [first_name.title(), last_name.title(), email.lower()]
+    return [first_name.title(), last_name.title(), email.lower()] + row[3:]
 
 
 def write_prospects(filename, prospects):
