@@ -1,9 +1,13 @@
+# Logan Vang
+# 10/27/2026
+# Wizard Inventory
+
 import random
 from pathlib import Path
 
-FOLDER = Path(__file__).resolve().parent
-ALL_ITEMS_FILENAME = FOLDER / "wizard_all_items.txt"
-INVENTORY_FILENAME = FOLDER / "wizard_inventory.txt"
+DATA_FOLDER = Path(__file__).resolve().parent
+ALL_ITEMS_FILE = DATA_FOLDER / "wizard_all_items.txt"
+INVENTORY_FILE = DATA_FOLDER / "wizard_inventory.txt"
 MAX_ITEMS = 4
 
 
@@ -21,27 +25,33 @@ def display_menu():
     print()
 
 
-def read_items(filename):
+def read_file(filename):
+    items = []
     with open(filename) as file:
-        return [line.strip() for line in file if line.strip()]
+        for line in file:
+            line = line.strip()
+            if line:
+                items.append(line)
+    return items
 
 
 def write_inventory(inventory):
-    with open(INVENTORY_FILENAME, "w") as file:
+    with open(INVENTORY_FILE, "w") as file:
         for item in inventory:
-            file.write(item + "\n")
+            file.write(f"{item}\n")
 
 
 def walk(all_items, inventory):
-    available_items = [item for item in all_items if item not in inventory]
-    if not available_items:
-        print("While walking down a path, you don't see anything.")
+    choices = [item for item in all_items if item not in inventory]
+    if len(choices) == 0:
+        print("While walking down a path, you find nothing new.")
         print()
         return
-    item = random.choice(available_items)
+
+    item = random.choice(choices)
     print(f"While walking down a path, you see {item}.")
-    choice = input("Do you want to grab it? (y/n): ").strip().lower()
-    if choice == "y":
+    grab = input("Do you want to grab it? (y/n): ").strip().lower()
+    if grab == "y":
         if len(inventory) >= MAX_ITEMS:
             print("You can't carry any more items. Drop something first.")
         else:
@@ -51,21 +61,22 @@ def walk(all_items, inventory):
     print()
 
 
-def show(all_items, inventory):
-    if not inventory:
+def show(inventory):
+    if len(inventory) == 0:
         print("You aren't carrying any items.")
-    for i, item in enumerate(inventory, start=1):
-        print(f"{i}. {item}")
+    for number, item in enumerate(inventory, start=1):
+        print(f"{number}. {item}")
     print()
 
 
-def drop(all_items, inventory):
+def drop(inventory):
     try:
         number = int(input("Number: "))
     except ValueError:
         print("Invalid item number.")
         print()
         return
+
     if number < 1 or number > len(inventory):
         print("Invalid item number.")
     else:
@@ -79,31 +90,30 @@ def main():
     display_title()
 
     try:
-        all_items = read_items(ALL_ITEMS_FILENAME)
+        all_items = read_file(ALL_ITEMS_FILE)
     except FileNotFoundError:
-        print(f"Could not find {ALL_ITEMS_FILENAME.name} file.")
+        print(f"Could not find {ALL_ITEMS_FILE.name}.")
         print("Exiting program. Bye!")
         return
 
     try:
-        inventory = read_items(INVENTORY_FILENAME)
+        inventory = read_file(INVENTORY_FILE)
     except FileNotFoundError:
-        print(f"Could not find {INVENTORY_FILENAME.name} file.")
-        print("Wizard is starting with no inventory.")
-        print()
         inventory = []
         write_inventory(inventory)
-
-    commands = {"walk": walk, "show": show, "drop": drop}
 
     display_menu()
     while True:
         command = input("Command: ").strip().lower()
-        if command == "exit":
+        if command == "walk":
+            walk(all_items, inventory)
+        elif command == "show":
+            show(inventory)
+        elif command == "drop":
+            drop(inventory)
+        elif command == "exit":
             print("Bye!")
             break
-        elif command in commands:
-            commands[command](all_items, inventory)
         else:
             print("Not a valid command. Please try again.")
             print()
