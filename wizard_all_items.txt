@@ -1,10 +1,9 @@
 a wooden staff
 a wizard hat
-a cloth robe
-a pair of cloth shoes
-a scroll of invisibility
-a scroll of uncursing
+a cloak of invisibility
+some elven bread
 an unknown potion
+a scroll of uncursing
+a scroll of invisibility
 a crossbow
-a magic wand
-a leather pouch
+a wizard's cloak
