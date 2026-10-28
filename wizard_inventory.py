@@ -50,7 +50,7 @@ def walk(all_items, inventory):
 
     item = random.choice(choices)
     print(f"While walking down a path, you see {item}.")
-    grab = input("Do you want to grab it? (y/n): ").lower()
+    grab = input("Do you want to grab it? (y/n): ").strip().lower()
     if grab == "y":
         if len(inventory) >= MAX_ITEMS:
             print("You can't carry any more items. Drop something first.")
@@ -104,7 +104,7 @@ def main():
 
     display_menu()
     while True:
-        command = input("Command: ").lower()
+        command = input("Command: ").strip().lower()
         if command == "walk":
             walk(all_items, inventory)
         elif command == "show":
