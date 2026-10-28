@@ -31,7 +31,8 @@ def write_inventory(inventory):
 
 
 def walk(all_items, inventory):
-    item = random.choice(all_items)
+    available_items = [item for item in all_items if item not in inventory]
+    item = random.choice(available_items)
     print(f"While walking down a path, you see {item}.")
     choice = input("Do you want to grab it? (y/n): ").strip().lower()
     if choice == "y":
