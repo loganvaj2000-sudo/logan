@@ -34,9 +34,8 @@ def main():
     print(f"Cleaned list: {CLEAN_FILENAME}")
     print()
 
-    rows = read_prospects(SOURCE_FILENAME)
-    header, prospects = rows[0], rows[1:]
-    cleaned = [header] + [clean_prospect(row) for row in prospects]
+    prospects = read_prospects(SOURCE_FILENAME)
+    cleaned = [clean_prospect(row) for row in prospects]
     write_prospects(CLEAN_FILENAME, cleaned)
 
     print("Congratulations! Your list has been cleaned!")
